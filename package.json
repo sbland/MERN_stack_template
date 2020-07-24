@@ -1,0 +1,25 @@
+{
+  "name": "mern_devops_stack_template",
+  "version": "1.0.0",
+  "description": "README.md",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "npm install --prefix app/server/ && npm install --prefix app/client/",
+    "heroku-prebuild": "cd server && npm install && cd ../client && npm install --prefix client/",
+    "heroku-build": "cd client && npm run build && cd ../server npm run build",
+    "build": "npm run build --prefix client/ && npm run build --prefix server/",
+    "start": "npm start server-build/server.js -i max"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sbland/MERN_DEVOPS_stack_template.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sbland/MERN_DEVOPS_stack_template/issues"
+  },
+  "homepage": "https://github.com/sbland/MERN_DEVOPS_stack_template#readme"
+}
+
