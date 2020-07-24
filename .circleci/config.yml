@@ -1,17 +1,63 @@
 version: 2.1
 orbs:
-  node: circleci/node@1.1.6
+  node: circleci/node@3.0.1
 jobs:
   build-and-test:
-    executor:
-      name: node/default
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:12.18.2
+        environment:
+          DATABASE: mongo_autodoor
+          DEMO_DATA_FILE: ./public/demo-data/demo-data.json
+          VALID_EMAIL_DOMAIN: test.com
+          MONGO_URL: mongodb://localhost:27017
     steps:
       - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
-            - run: npm test
+          # Download and cache dependencies
+      - restore_cache:
+        keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - app-dependencies-{{ checksum "./app/server/package.json" }}-{{ checksum "./client/package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - app-dependencies-
+
+      # install server and client modules
+      - run: npm run install-all
+
+      - save_cache:
+          paths:
+            - ./node-server/node_modules
+            - ./react-client/node_modules
+          key: app-dependencies-{{ checksum "./app/server/package.json" }}-{{ checksum "./app/client/package.json" }}
+
+      # build front and backend
+      - run: npm build
+
+      # # reset db
+      # - run: cd node-server && npm run reset-data
+      # run tests
+      - run: npm run test-all
 workflows:
-    build-and-test:
-      jobs:
-        - build-and-test
+  test-and-deploy:
+    jobs:
+      - build-and-test:
+          filters:
+            branches:
+              only:
+                - release
+                - beta
+                - master
