@@ -27,7 +27,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - app-dependencies-{{ checksum "./app/server/package.json" }}-{{ checksum "./client/package.json" }}
+            - app-dependencies-{{ checksum "./app/server/package.json" }}-{{ checksum "./app/client/package.json" }}
             # fallback to using the latest cache if no exact match is found
             - app-dependencies-
 
