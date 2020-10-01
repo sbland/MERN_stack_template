@@ -43,8 +43,8 @@ Choose one of the below options to run the app in a development environment
 Instructions on task file https://www.npmjs.com/package/tasksfile
 
 To build and run the app:
-- `npm run task docker_build`
-- `nom run task docker_run`
+- `npm run task docker_compose_build`
+- `nom run task docker_compose_run`
 
 ### To open a nodejs container environment (NOT TESTED)
 - `(Ctrl + Shift + P)` then `Remote-Containers: Reopen Folder in Container... `
