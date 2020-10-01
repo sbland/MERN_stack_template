@@ -14,7 +14,7 @@ services:
       context: ./app/server
       dockerfile: Dockerfile.dev
     container_name: ${PROJECT_NAME}_node-server_dev
-    command: node server
+    command: nodemon server
     ports:
       - 3100:5000
     volumes:
