@@ -52,6 +52,6 @@ cli({
   hello_world: run_wrap(hello_world),
   docker_build: run_wrap(docker_build),
   docker_run: run_wrap(docker_run),
-  docker_compose_build: run_wrap(docker_compose_run),
+  docker_compose_build: run_wrap(docker_compose_build),
   docker_compose_run: run_wrap(docker_compose_run),
 })
