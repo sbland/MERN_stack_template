@@ -6,4 +6,4 @@ COPY package*.json ./
 RUN npm install
 WORKDIR /node/app
 EXPOSE 3000
-ENTRYPOINT npm start
+# ENTRYPOINT npm start

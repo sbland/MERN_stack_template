@@ -1,0 +1,51 @@
+version: "2"
+services:
+  mongo:
+    ports:
+      - 27017:27017
+    build: ./mongodb
+    logging:
+      driver: none
+    volumes:
+      - ./data/mongo:/data
+  node-server:
+    image: ${PROJECT_NAME}_node-server:dev
+    build:
+      context: ./app/server
+      dockerfile: Dockerfile.dev
+    container_name: ${PROJECT_NAME}_node-server_dev
+    command: node server
+    ports:
+      - 3100:5000
+    volumes:
+      - ./file:/app/file
+      - ./logs/node:/var/log/server
+      - ./app/server:/node/app
+    environment:
+      - HOST_NAME=${HOST_NAME_FULL}
+      - MONGO_URL=${MONGO_URL}
+      - DATABASE=${DATABASE}
+      - NODE_ENV=development
+      - DEMO_DATA_FILE=${DEMO_DATA_FILE}
+
+  react-client:
+    image: ${PROJECT_NAME}_react-client:dev
+    build:
+      context: ./app/client
+      dockerfile: Dockerfile.dev
+    container_name: ${PROJECT_NAME}_react-client_dev
+    # command: touch empty.txt && tail -F empty.txt
+    # command: react-scripts start
+    stdin_open: true
+    command: yarn start
+    ports:
+      - 3200:3000
+    volumes:
+      - ./file:/node/app/file
+      - ./app/client:/node/app
+    environment:
+      - REACT_APP_PROXY_URL=http://node-server:5000
+      - REACT_APP_SERVER_URL=server
+      - NODE_ENV=development
+    depends_on:
+      - node-server

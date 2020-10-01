@@ -40,10 +40,18 @@ function docker_build(options, target, mode = 'DEVELOPMENT') {
   if (target) targets[target]();
   else Object.values(targets).forEach((t) => t())
 }
+function docker_compose_build(options) {
+  sh(`cd ${ROOT} && docker-compose build > ${LOG_LOCATION}/docker_build_app_server.log`, {async: true})
+}
 
+function docker_compose_run(optons) {
+  sh(`cd ${ROOT} && docker-compose up > ${LOG_LOCATION}/docker_build_app_server.log`, {async: true})
+}
 
 cli({
   hello_world: run_wrap(hello_world),
   docker_build: run_wrap(docker_build),
   docker_run: run_wrap(docker_run),
+  docker_compose_build: run_wrap(docker_compose_run),
+  docker_compose_run: run_wrap(docker_compose_run),
 })
