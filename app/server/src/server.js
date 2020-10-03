@@ -57,4 +57,6 @@ const authRequest = (req, res, next) => next();
 // TODO: Implement session manager
 // const { authRequest } = sessionManager;
 
-server.use('*', authRequest, router);
+// server.use('*', authRequest, router);
+
+module.exports = server;
